@@ -43,34 +43,43 @@ AWS Glue, AWS S3, Python, and Spark
 - z
 
 # Files
-- `customer_landing.sql`<br>`accelerometer_landing.sql`<br>SQL DDL scripts that creating Glue Tables from JSON data.
-- `customer_landing.png`<br>`accelerometer_landing.png`<br>Screenshots show SELECT statements from Athena showing the **Customer** and **Accelerometer landing data**, where the customer landing data has **multiple rows** where 'shareWithResearchAsOfDate' is blank.
-- `customer_landing_to_trusted.py`<br>Sanitize the **Customer** data from the Website (Landing Zone) and only store the Customer Records who **agreed to share** their data from research purposes (Trusted Zone).
-- `accelerometer_landing_to_trusted.py`<br>Sanitize the **Accelerometer** data from the Mobile App (Landing Zone) and only store Accelerometer Readings from the customers who **agreed to share** their data for research purposes (Trusted Zone).
-- `customer_trusted.png`<br>A screenshot that shows a SELECT * statement from Athena showing the customer landing data, where the resulting **Customer trusted data** has **no rows** where 'shareWithResearchAsOfDate' is blank.
-- `customer_trusted_to_curated.py`<br>Santize the **Customer** data (Trusted Zone) and create a Glue Table (Curated Zone) that only includes customers who **have accelerometer data** and have **agreed to share** their data for research.
-- `trainer_trusted_to_curated.py`<br>Create an aggregated table that has **each of the Step Trainer readings**, and the **associated accelerometer reading data for the same timestamp**, but only for customers who have **agreed to share** their data.
-
-# ETL Process
 ## Customer
-- Landing Zone - Athena
-- Landing to Trusted - Glue Studio/Spark Job
-  - Filter protected PII: Drop data that doesn't have data in the 'shareWithResearchAsOfDate' column.
-- Trusted Zone - Athena
-  - Screenshot shows that results have no rows where 'shareWithResearchAsOfDate' is blank.
-- Trusted to Curated - Glue Studeio/Spark Job
-  - Only contains only customer data from customer records that aggreed to share data, and is joined with the correct accelerometer data.
+- Landing Zone
+  - (Athena)SQL script - `customer_landing.sql`
+  - (Athena)Glue Table - **customer_landing**
+  - (Athena)Screenshot - `customer_landing.png`
+    - Multiple rows where 'shareWithResearchAsOfDate' is blank
+- Trusted Zone
+  - (Glue Studio/Spark Job)Python script - `customer_landing_to_trusted.py`
+    - Customers who agreed to share their data from research purposes.
+  - (Athena)Glue Table - **customer_trusted**
+  - (Athena)Screenshot - `customer_trusted.png`
+    - No rows where 'shareWithResearchAsOfDate' is blank
+- Curated Zone
+  - (Glue Studio/Spark Job)Python script - `customer_trusted_to_curated.py`
+    - Customers who have accelerometer data
+    - Customers who agreed to share their data for research
+  - (Athena)Glue Table - **customer_curated**
 ## Accelerometer
-- Landing Zone - Athena
-- Landing to Trusted - Glue Studio/Spark Job
-  - Filter out any readings that were prior to the research consent date.
-  - Join Privacy tables - Inner joins that join up with the customer_landing table on the 'serialNumber' field.
+- Landing Zone
+  - (Athena)SQL script - `accelerometer_landing.sql`
+  - (Athena)Glue Table - **accelerometer_landing**
+  - (Athena)Screenshot - `accelerometer_landing.png`
+- Trusted Zone
+  - (Glue Studio/Spark Job)Python script - `accelerometer_landing_to_trusted.py`
+    - Accelerometer Readings from the customers who agreed to share their data for research purposes
+  - (Athena)Glue Table - **accelerometer_trusted**
 ## Step Trainer
-- Landing Zone - Athena
-- Landing to Trusted - Glue Studio/Spark Job
-  - Inner Join with customer_curated table.
-# Curated
-- Glue Studio/Spark Job
-  - Join trusted data: Inner joins with the customer_trusted table.
-  - Anonymize the final curated table: Remove email, and any other personally identifying information up front.
-
+- Landing Zone
+- Trusted Zone
+  - (Glue Studio/Spark Job)Python script - `step_trainer_landing_to_trusted.py`
+    - Step Trainer Records for customers who have accelerometer data
+    - Step Trainer Records for customers who have agreed to share their data for research
+  - (Athena)Glue Table - **step_trainer_trusted**
+## Machine Learning
+- Curated Zone
+  - (Glue Studio/Spark Job)Python script - `aggregation.py`
+    - Each of the Step Trainer Readings
+    - Associated accelerometer reading data for the same timestamp
+    - Only for customers who have agreed to share their data
+  - (Athena)Glue Table - **machine_learning_curated**
