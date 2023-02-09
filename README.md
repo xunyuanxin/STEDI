@@ -45,36 +45,38 @@ AWS Glue, AWS S3, Python, and Spark
 # ETL Process
 ## Customer
 - Landing Zone
-  - (Athena)SQL script - `customer_landing.sql`
+  - (Athena)SQL DDL script - `customer_landing.sql`
   - (Athena)Glue Table - **customer_landing**
   - (Athena)Screenshot - `customer_landing.png`
     - Multiple rows where 'shareWithResearchAsOfDate' is blank
 - Trusted Zone
   - (Glue Studio/Spark Job)Python script - `customer_landing_to_trusted.py`
-    - Customers who agreed to share their data from research purposes.
+    - Connect to S3 bucket for customer landing zone
+    - Filter customers who agreed to share their data from research purposes
   - (Athena)Glue Table - **customer_trusted**
   - (Athena)Screenshot - `customer_trusted.png`
     - No rows where 'shareWithResearchAsOfDate' is blank
 - Curated Zone
   - (Glue Studio/Spark Job)Python script - `customer_trusted_to_curated.py`
-    - Customers who have accelerometer data
-    - Customers who agreed to share their data for research
+    - Filter customers who have accelerometer data
+    - Filter customers who agreed to share their data for research
   - (Athena)Glue Table - **customer_curated**
 ## Accelerometer
 - Landing Zone
-  - (Athena)SQL script - `accelerometer_landing.sql`
+  - (Athena)SQL DDL script - `accelerometer_landing.sql`
   - (Athena)Glue Table - **accelerometer_landing**
   - (Athena)Screenshot - `accelerometer_landing.png`
 - Trusted Zone
   - (Glue Studio/Spark Job)Python script - `accelerometer_landing_to_trusted.py`
-    - Accelerometer Readings from the customers who agreed to share their data for research purposes
+    - Connect to S3 bucket for accelerometer landing zone
+    - Filter accelerometer readings from the customers who agreed to share their data for research purposes
   - (Athena)Glue Table - **accelerometer_trusted**
 ## Step Trainer
 - Landing Zone
 - Trusted Zone
   - (Glue Studio/Spark Job)Python script - `step_trainer_landing_to_trusted.py`
-    - Step Trainer Records for customers who have accelerometer data
-    - Step Trainer Records for customers who have agreed to share their data for research
+    - Filter step trainer records for customers who have accelerometer data
+    - Filter step trainer records for customers who have agreed to share their data for research
   - (Athena)Glue Table - **step_trainer_trusted**
 ## Machine Learning
 - Curated Zone
