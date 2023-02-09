@@ -54,8 +54,8 @@ AWS Glue, AWS S3, Python, and Spark
 # ETL Process
 ## Customer
 - Landing Zone - Athena
-- Landing to Trusted: Filter protected PII - Glue Studio/Spark Job
-  - Drop data that doesn't have data in the 'shareWithResearchAsOfDate' column.
+- Landing to Trusted - Glue Studio/Spark Job
+  - Filter protected PII: Drop data that doesn't have data in the 'shareWithResearchAsOfDate' column.
 - Trusted Zone - Athena
   - Screenshot shows that results have no rows where 'shareWithResearchAsOfDate' is blank.
 - Trusted to Curated - Glue Studeio/Spark Job
