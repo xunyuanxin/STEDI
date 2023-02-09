@@ -41,17 +41,29 @@ AWS Glue, AWS S3, Python, and Spark
 - x
 - y
 - z
+
 # Files
 ## Landing Zone
-- Use Glue Studio to ingest customer and accelerometer landing zone data from S3 bucket.<br>`customer_landing_to_trusted.py`<br>`accelerometer_landing_to_trusted`
-- Manually create a Glue Table using Glue Console from JSON data.
-<br>`customer_landing.sql`<br>`accelerometer_landing.sql`
-
+- `customer_landing.sql`<br>`accelerometer_landing.sql`<br>SQL DDL scripts that creating Glue Tables from JSON data.
+- `customer_landing.png`<br>`accelerometer_landing.png`<br>Screenshots show SELECT statements from Athena showing the **Customer** and **Accelerometer landing data**, where the customer landing data has **multiple rows** where 'shareWithResearchAsOfDate' is blank.
 ## Trusted Zone
-
+- `customer_landing_to_trusted.py`<br>Sanitize the **Customer** data from the Website (Landing Zone) and only store the Customer Records who **agreed to share** their data from research purposes (Trusted Zone).
+- `accelerometer_landing_to_trusted.py`<br>Sanitize the **Accelerometer** data from the Mobile App (Landing Zone) and only store Accelerometer Readings from the customers who **agreed to share** their data for research purposes (Trusted Zone).
+- `customer_trusted.png`<br>A screenshot that shows a SELECT * statement from Athena showing the customer landing data, where the resulting **Customer trusted data** has **no rows** where 'shareWith ResearchAsOfDate' is blank.
 ## Curated Zone
-# Steps
+- `customer_trusted_to_curated.py`<br>Santize the **Customer** data (Trusted Zone) and create a Glue Table (Curated Zone) that only includes customers who **have accelerometer data** and have **agreed to share** their data for research.
+- `trainer_trusted_to_curated.py`<br>Create an aggregated table that has **each of the Step Trainer readings**, and the **associated accelerometer reading data for the same timestamp**, but only for customers who have **agreed to share** their data.
 
-- Create S3 directories for **customer_landing**, **step_trainer_landing**, and **accelerometer_landing** zones
-- Copy the data there
-- Create two Glue tables for the two landing zones
+
+# Steps
+## Landing to Trusted Zone
+`customer_landing_to_trusted.py`<br>`accelerometer_landing_to_trusted.py`
+- Configuration: Shows that the option to dynamically infer and update schema is enabled.
+- Filter out any readings that were prior to the research consent date.
+- Join Privacy tables: Inner joins that join up with the customer_landing table on the 'serialNumber' field.
+- Filter protected PII: Drop data that doesn't have data in the 'shareWithResearchAsOfDate' column.
+## Trusted to Curated Zone
+`customer_trusted_to_curated.py`<br>`trainer_trusted_to_curated.py`
+- Join trusted data: Inner joins with the customer_trusted table.
+- Create curated data: Only contains only customer data from customer records that aggreed to share data, and is joined with the correct accelerometer data.
+- Anonymize the final curated table: Remove email, and any other personally identifying information up front.
