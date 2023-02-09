@@ -42,7 +42,7 @@ AWS Glue, AWS S3, Python, and Spark
 - y
 - z
 
-# Files
+# ETL Process
 ## Customer
 - Landing Zone
   - (Athena)SQL script - `customer_landing.sql`
