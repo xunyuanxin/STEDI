@@ -51,7 +51,6 @@ AWS Glue, AWS S3, Python, and Spark
     - Multiple rows where 'shareWithResearchAsOfDate' is blank
 - Trusted Zone
   - (Glue Studio/Spark Job)Python script - `customer_landing_to_trusted.py`
-    - Connect to S3 bucket for customer landing zone
     - Filter customers who agreed to share their data from research purposes
   - (Athena)Glue Table - **customer_trusted**
   - (Athena)Screenshot - `customer_trusted.png`
@@ -69,6 +68,7 @@ AWS Glue, AWS S3, Python, and Spark
 - Trusted Zone
   - (Glue Studio/Spark Job)Python script - `accelerometer_landing_to_trusted.py`
     - Connect to S3 bucket for accelerometer landing zone
+    - Inner Join that join up the customer_landing table on the 'serialNumber' field
     - Filter accelerometer readings from the customers who agreed to share their data for research purposes
   - (Athena)Glue Table - **accelerometer_trusted**
 ## Step Trainer
@@ -85,3 +85,13 @@ AWS Glue, AWS S3, Python, and Spark
     - Associated accelerometer reading data for the same timestamp
     - Only for customers who have agreed to share their data
   - (Athena)Glue Table - **machine_learning_curated**
+
+# Spark Jobs
+Customer Landing to Trusted
+- Ingest data: Connect to S3 bucket for customer landing zone
+- Filter Protected PII: Drop data that doesn't have data in the 'shareWithResearchAsOfDate' column
+
+Accelerometer Landing to Trusted
+- Ingest data: Connect to S3 bucket for accelerometer landing zone
+- Join privacy table: Inner Join that join up the customer_landing table on the 'serialNumber' field
+- Filter Protected PII: Drop data that doesn't have data in the 'shareWithResearchAsOfDate' column
