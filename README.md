@@ -53,21 +53,21 @@ AWS Glue, AWS S3, Python, and Spark
 
 # ETL Process
 ## Customer
-- Athena - Landing Zone
-- Glue Studio/Spark Job - Landing to Trusted: Filter protected PII
+- Landing Zone - Athena
+- Landing to Trusted: Filter protected PII - Glue Studio/Spark Job
   - Drop data that doesn't have data in the 'shareWithResearchAsOfDate' column.
-- Athena - Trusted Zone
+- Trusted Zone - Athena
   - Screenshot shows that results have no rows where 'shareWithResearchAsOfDate' is blank.
-- Glue Studeio/Spark Job - Trusted to Curated
+- Trusted to Curated - Glue Studeio/Spark Job
   - Only contains only customer data from customer records that aggreed to share data, and is joined with the correct accelerometer data.
 ## Accelerometer
-- Athena - Landing Zone
-- Glue Studio/Spark Job - Landing to Trusted
+- Landing Zone - Athena
+- Landing to Trusted - Glue Studio/Spark Job
   - Filter out any readings that were prior to the research consent date.
   - Join Privacy tables - Inner joins that join up with the customer_landing table on the 'serialNumber' field.
 ## Step Trainer
-- Athena - Landing Zone
-- Glue Studio/Spark Job - Landing to Trusted
+- Landing Zone - Athena
+- Landing to Trusted - Glue Studio/Spark Job
   - Inner Join with customer_curated table.
 # Curated
 - Glue Studio/Spark Job
