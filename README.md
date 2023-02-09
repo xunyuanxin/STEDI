@@ -67,8 +67,6 @@ AWS Glue, AWS S3, Python, and Spark
   - (Athena)Screenshot - `accelerometer_landing.png`
 - Trusted Zone
   - (Glue Studio/Spark Job)Python script - `accelerometer_landing_to_trusted.py`
-    - Connect to S3 bucket for accelerometer landing zone
-    - Inner Join that join up the customer_landing table on the 'serialNumber' field
     - Filter accelerometer readings from the customers who agreed to share their data for research purposes
   - (Athena)Glue Table - **accelerometer_trusted**
 ## Step Trainer
