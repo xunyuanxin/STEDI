@@ -78,18 +78,8 @@ AWS Glue, AWS S3, Python, and Spark
   - (Athena)Glue Table - **step_trainer_trusted**
 ## Machine Learning
 - Curated Zone
-  - (Glue Studio/Spark Job)Python script - `aggregation.py`
+  - (Glue Studio/Spark Job)Python script - `machine_learning_curated.py`
     - Each of the Step Trainer Readings
     - Associated accelerometer reading data for the same timestamp
     - Only for customers who have agreed to share their data
   - (Athena)Glue Table - **machine_learning_curated**
-
-# Spark Jobs
-Customer Landing to Trusted
-- Ingest data: Connect to S3 bucket for customer landing zone
-- Filter Protected PII: Drop data that doesn't have data in the 'shareWithResearchAsOfDate' column
-
-Accelerometer Landing to Trusted
-- Ingest data: Connect to S3 bucket for accelerometer landing zone
-- Join privacy table: Inner Join that join up the customer_landing table on the 'serialNumber' field
-- Filter Protected PII: Drop data that doesn't have data in the 'shareWithResearchAsOfDate' column
